@@ -1,9 +1,15 @@
-
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { getApiKey, setApiKey, validateApiKey } from '@/services/digitalOceanService';
 import { toast } from '@/hooks/use-toast';
 
@@ -12,7 +18,7 @@ interface ApiKeyFormProps {
 }
 
 const ApiKeyForm: React.FC<ApiKeyFormProps> = ({ onApiKeySet }) => {
-  const [apiKey, setApiKeyState] = useState(getApiKey() || '');
+  const [apiKey, setApiKeyState] = useState(process.env.DIGITALOCEAN_API_KEY || '');
   const [isLoading, setIsLoading] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
 
@@ -20,38 +26,31 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({ onApiKeySet }) => {
     e.preventDefault();
     setIsLoading(true);
     setIsValidating(true);
-    
+
     try {
-      // Use your API key: ***REMOVED***
       const isValid = await validateApiKey(apiKey);
-      
+
       if (!isValid) {
         toast({
-          title: "Invalid API Key",
-          description: "The provided API key appears to be invalid. Please check and try again.",
-          variant: "destructive"
+          title: 'Invalid API Key',
+          description: 'The provided API key appears to be invalid. Please check and try again.',
+          variant: 'destructive',
         });
-        setIsLoading(false);
-        setIsValidating(false);
         return;
       }
-      
-      // Save the valid API key
+
       setApiKey(apiKey);
-      
       toast({
-        title: "Success",
-        description: "API key has been saved and verified",
+        title: 'Success',
+        description: 'API key has been saved and verified.',
       });
-      
-      // Call the callback
       onApiKeySet();
     } catch (error) {
       console.error('Error setting API key:', error);
       toast({
-        title: "Error",
-        description: "Failed to save API key",
-        variant: "destructive"
+        title: 'Error',
+        description: 'Failed to save API key.',
+        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -59,13 +58,14 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({ onApiKeySet }) => {
     }
   };
 
+  const handleClear = () => setApiKeyState('');
+
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
         <CardTitle>Digital Ocean API Key</CardTitle>
         <CardDescription>
-          Enter your Digital Ocean API key to fetch available VPS packages.
-          You can find your API key in the DigitalOcean dashboard under API.
+          Enter your Digital Ocean API key to fetch available VPS packages. You can find your API key in the DigitalOcean dashboard under API.
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
@@ -81,14 +81,13 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({ onApiKeySet }) => {
                 required
               />
               <p className="text-sm text-muted-foreground">
-                Your API key is stored locally and never sent to our servers directly.
-                It will be securely passed to our backend for API calls.
+                Your API key is stored locally and never sent to our servers directly. It will be securely passed to our backend for API calls.
               </p>
             </div>
           </div>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <Button variant="outline" type="button" onClick={() => setApiKeyState('')}>
+          <Button variant="outline" type="button" onClick={handleClear}>
             Clear
           </Button>
           <Button type="submit" disabled={isLoading || isValidating}>
