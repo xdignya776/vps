@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Card,
   CardContent,
@@ -14,13 +14,22 @@ import { getApiKey, setApiKey, validateApiKey } from '@/services/digitalOceanSer
 import { toast } from '@/hooks/use-toast';
 
 interface ApiKeyFormProps {
-  onApiKeySet: () => void;
+  onApiKeySet: () => void ;
 }
 
 const ApiKeyForm: React.FC<ApiKeyFormProps> = ({ onApiKeySet }) => {
-  const [apiKey, setApiKeyState] = useState(process.env.DIGITALOCEAN_API_KEY || '');
+  const [apiKey, setApiKeyState] = useState(''); // Initialize with an empty string
   const [isLoading, setIsLoading] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
+
+  useEffect(() => {
+    // Fetch the API key from environment variables or a secure source
+    const fetchApiKey = async () => {
+      const key = await getApiKey(); // Assuming getApiKey fetches the key securely
+      setApiKeyState(key || '');
+    };
+    fetchApiKey();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,7 +48,7 @@ const ApiKeyForm: React.FC<ApiKeyFormProps> = ({ onApiKeySet }) => {
         return;
       }
 
-      setApiKey(apiKey);
+      await setApiKey(apiKey); // Save the API key securely
       toast({
         title: 'Success',
         description: 'API key has been saved and verified.',

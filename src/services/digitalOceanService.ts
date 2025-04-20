@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 
@@ -174,12 +173,45 @@ export const setApiKey = (key: string) => {
   return key;
 };
 
-export const getApiKey = () => {
-  return null; // Now using environment variable in the edge function
+export const getApiKey = async (): Promise<string | null> => {
+  try {
+    console.log('Fetching API key from Supabase secrets...');
+
+    // Fetch the primary API key from Supabase secrets
+    const { data: primaryKey, error: primaryError } = await supabase.functions.invoke('get-secret', {
+      method: 'POST',
+      body: { key: 'DIGITALOCEAN_API_KEY' },
+    });
+
+    if (primaryError || !primaryKey) {
+      console.error('Primary API key fetch failed:', primaryError);
+
+      // Attempt to fetch the secondary API key if the primary fails
+      const { data: secondaryKey, error: secondaryError } = await supabase.functions.invoke('get-secret', {
+        method: 'POST',
+        body: { key: 'DIGITALOCEAN_API_KEY1' },
+      });
+
+      if (secondaryError || !secondaryKey) {
+        console.error('Secondary API key fetch failed:', secondaryError);
+        return null; // Return null if both keys fail
+      }
+
+      console.log('Using secondary API key');
+      return secondaryKey;
+    }
+
+    console.log('Using primary API key');
+    return primaryKey;
+  } catch (error) {
+    console.error('Error fetching API key from Supabase secrets:', error);
+    return null;
+  }
 };
 
-export const hasApiKey = () => {
-  return true; // Always return true since we're using the secret
+export const hasApiKey = async (): Promise<boolean> => {
+  const apiKey = await getApiKey();
+  return !!apiKey; // Return true if an API key is successfully fetched
 };
 
 // Validation function for API keys (not used anymore but kept for compatibility)
