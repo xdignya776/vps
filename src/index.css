@@ -1,0 +1,206 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 95%;
+    --foreground: 215 13% 20%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 215 13% 20%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 13% 20%;
+    
+    --primary: 108 35% 36%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 108 37% 31%;
+    --secondary-foreground: 0 0% 100%;
+    
+    --muted: 108 20% 92%;
+    --muted-foreground: 215 13% 40%;
+    
+    --accent: 108 21% 54%;
+    --accent-foreground: 0 0% 100%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --border: 108 10% 85%;
+    --input: 108 10% 85%;
+    --ring: 108 35% 36%;
+    
+    --radius: 0.8rem;
+
+    --sidebar: 108 35% 36%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 108 37% 31%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 108 21% 54%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 108 35% 30%;
+    --sidebar-ring: 108 37% 31%;
+  }
+
+  .dark {
+    --background: 108 35% 15%;
+    --foreground: 0 0% 98%;
+    
+    --card: 108 35% 15%;
+    --card-foreground: 0 0% 98%;
+    
+    --popover: 108 35% 15%;
+    --popover-foreground: 0 0% 98%;
+    
+    --primary: 108 35% 36%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 108 37% 31%;
+    --secondary-foreground: 0 0% 100%;
+    
+    --muted: 108 35% 20%;
+    --muted-foreground: 108 15% 70%;
+    
+    --accent: 108 21% 54%;
+    --accent-foreground: 0 0% 100%;
+    
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --border: 108 35% 25%;
+    --input: 108 35% 25%;
+    --ring: 108 35% 36%;
+
+    --sidebar: 108 35% 15%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 108 35% 36%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 108 21% 54%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 108 35% 25%;
+    --sidebar-ring: 108 35% 36%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-input;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans selection:bg-primary/20;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-medium tracking-tight;
+  }
+
+  h1 {
+    @apply text-4xl sm:text-5xl md:text-6xl;
+  }
+
+  h2 {
+    @apply text-3xl sm:text-4xl;
+  }
+
+  h3 {
+    @apply text-2xl sm:text-3xl;
+  }
+
+  h4 {
+    @apply text-xl sm:text-2xl;
+  }
+
+  p {
+    @apply leading-7;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-sm;
+  }
+  
+  .glass-card {
+    @apply glass-panel rounded-xl;
+  }
+  
+  .section-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24;
+  }
+  
+  .animate-on-scroll {
+    @apply opacity-0 transition-all duration-700 ease-in-out;
+  }
+  
+  .animate-on-scroll.is-visible {
+    @apply opacity-100;
+  }
+
+  .price-tag {
+    @apply relative inline-flex items-center justify-center;
+  }
+
+  .price-tag::before {
+    @apply content-[''] absolute -inset-1 bg-gradient-to-r from-primary/20 to-primary/5 rounded-full blur opacity-70;
+  }
+  
+  .feature-icon {
+    @apply relative p-2 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 text-primary;
+  }
+  
+  .pricing-card {
+    @apply bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-pricing transition-all duration-300;
+  }
+  
+  .pricing-card-popular {
+    @apply border-dark-navy shadow-pricing transform scale-105;
+  }
+  
+  .feature-card {
+    @apply bg-white rounded-xl p-6 border border-gray-100 shadow-sm hover:shadow-feature transition-all duration-300;
+  }
+
+  .bg-pale {
+    @apply bg-[#D5DAD5];
+  }
+
+  .card-white-bg {
+    @apply bg-white border border-border;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-blue-200/50;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-dark-gray/30 rounded-full transition-colors hover:bg-dark-gray/40;
+}
+
+.delay-100 {
+  animation-delay: 0.1s;
+}
+.delay-200 {
+  animation-delay: 0.2s;
+}
+.delay-300 {
+  animation-delay: 0.3s;
+}
+.delay-400 {
+  animation-delay: 0.4s;
+}
+.delay-500 {
+  animation-delay: 0.5s;
+}
